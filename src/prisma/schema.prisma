@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Chain {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  type      String?
+  rpcUrl    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  validators Validator[]
+  nodes      Node[]
+}
+
+model Validator {
+  id          String   @id @default(uuid())
+  chainId     String
+  address     String
+  name        String?
+  status      String?
+  commission  Int?
+  apr         Float?
+  totalStaked Float?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  chain   Chain             @relation(fields: [chainId], references: [id])
+  metrics ValidatorMetric[]
+  logs    ValidatorLog[]
+  nodes   Node[]
+
+  @@unique([address, chainId])
+}
+
+model ValidatorMetric {
+  id          String   @id @default(uuid())
+  validatorId String
+  epoch       Int?
+  apr         Float?
+  commission  Int?
+  rewards     Float?
+  slot        Int?
+  uptime      Float?
+  stake       Float?
+  createdAt   DateTime @default(now())
+
+  validator Validator @relation(fields: [validatorId], references: [id])
+}
+
+model ValidatorLog {
+  id          String   @id @default(uuid())
+  validatorId String
+  level       String?
+  message     String
+  timestamp   DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  validator Validator @relation(fields: [validatorId], references: [id])
+}
+
+model Node {
+  id          String   @id @default(uuid())
+  chainId     String
+  validatorId String?
+  type        String?
+  name        String?
+  endpoint    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  chain     Chain      @relation(fields: [chainId], references: [id])
+  validator Validator? @relation(fields: [validatorId], references: [id])
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions Session[]
+}
+
+model Session {
+  id        String    @id @default(uuid())
+  userId    String
+  token     String    @unique
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
