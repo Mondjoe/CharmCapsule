@@ -1,4 +1,7 @@
 
+ CharmCapsule Backend  Official README (Upgraded Version)
+
+ Overview
 CharmCapsule Backend is a NestJS-powered API system designed for secure authentication, password hashing, and modular service expansion.  
 It is optimized for Termux (Android) and uses bcryptjs to ensure smooth installation without native build failures.
 
@@ -142,3 +145,5 @@ CharmCapsule Backend is part of the CharmCapsule Web3 Infrastructure, designed a
 
  License
 Owned and maintained by Charm_Capsule.
+
+---
