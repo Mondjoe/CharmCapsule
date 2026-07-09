@@ -1,13 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
-  async hashPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, 10);
+  constructor(private prisma: PrismaService) {}
+
+  async register(email: string, password: string) {
+    const exists = await this.prisma.user.findUnique({
+      where: { email }
+    });
+
+    if (exists) {
+      throw new BadRequestException('Email already registered');
+    }
+
+    const hashed = await bcrypt.hash(password, 10);
+
+    return this.prisma.user.create({
+      data: { email, password: hashed }
+    });
   }
 
-  async comparePassword(password: string, hashed: string): Promise<boolean> {
-    return bcrypt.compare(password, hashed);
+  async login(email: string, password: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { email }
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const valid = await bcrypt.compare(password, user.password);
+
+    if (!valid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return user;
   }
 }
