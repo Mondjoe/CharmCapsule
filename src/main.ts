@@ -7,7 +7,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('CharmCapsule API')
-    .setDescription('API documentation for CharmCapsule backend')
+    .setDescription('CharmCapsule backend documentation')
     .setVersion('1.0')
     .build();
 
