@@ -1,10 +1,19 @@
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
-const config = new DocumentBuilder()
-  .setTitle('CharmCapsule API')
-  .setDescription('CharmCapsule Backend API Documentation')
-  .setVersion('1.0')
-  .build();
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
 
-const document = SwaggerModule.createDocument(app, config);
-SwaggerModule.setup('docs', app, document);
+  const config = new DocumentBuilder()
+    .setTitle('CharmCapsule API')
+    .setDescription('API documentation for CharmCapsule backend')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
+
+  await app.listen(3000);
+}
+bootstrap();
