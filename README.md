@@ -1,149 +1,149 @@
+---
 
- CharmCapsule Backend  Official README (Upgraded Version)
+ CharmCapsule Backend  API Table + Swagger Spec (Upgraded)
 
- Overview
-CharmCapsule Backend is a NestJS-powered API system designed for secure authentication, password hashing, and modular service expansion.  
-It is optimized for Termux (Android) and uses bcryptjs to ensure smooth installation without native build failures.
+ API Table
 
-This backend is part of the CharmCapsule Web3 ecosystem, built by Sovereign Architect Charm_Capsule.
+| Endpoint | Method | Description | Body / Params |
+|--------------|------------|------------------|--------------------|
+| / | GET | Health check | None |
+| /user/register | POST | Register new user | { "username": string, "password": string } |
+| /user/login | POST | Login user | { "username": string, "password": string } |
+| /user/hash-test | POST | Test hashing (dev only) | { "password": string } |
+| /user/compare-test | POST | Test compare (dev only) | { "password": string, "hash": string } |
+
+Notes
+- All password operations use bcryptjs  
+- No native modules  
+- Works on Termux / Android  
+- Safe for Node 2026  
 
 ---
 
- Architecture
-`
-src/
-  app.module.ts
-  app.controller.ts
-  app.service.ts
-  modules/
-       user/
-            user.module.ts
-            user.controller.ts
-            user.service.ts
-`
+ Swagger / OpenAPI Spec (AutoReady)
 
-Modules
-- App Module  Core bootstrap  
-- User Module  Authentication, hashing, comparison  
-- User Service  bcryptjs logic  
-- User Controller  API endpoints  
+Paste this into your README under Swagger Spec section.  
+This is OpenAPI 3.0 format  ready for Swagger UI, Redoc, or Postman import.
+
+`yaml
+openapi: 3.0.0
+info:
+  title: CharmCapsule Backend API
+  version: 1.0.0
+  description: API documentation for CharmCapsule NestJS backend.
+
+paths:
+  /:
+    get:
+      summary: Health Check
+      responses:
+        '200':
+          description: Backend is running
+
+  /user/register:
+    post:
+      summary: Register new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User registered
+
+  /user/login:
+    post:
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+
+  /user/hash-test:
+    post:
+      summary: Hash password (dev only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Hashed password returned
+
+  /user/compare-test:
+    post:
+      summary: Compare password (dev only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                hash:
+                  type: string
+      responses:
+        '200':
+          description: Compare result returned
+`
 
 ---
 
- Tech Stack
-- NestJS  
-- TypeScript  
-- pnpm  
-- bcryptjs  
-- Node.js 20+ / 26  
-- Termux (Android) compatible  
+ How to Enable Swagger in NestJS
 
----
+Add this inside main.ts:
 
- Installation
-Install dependencies:
+`ts
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
+const config = new DocumentBuilder()
+  .setTitle('CharmCapsule API')
+  .setDescription('CharmCapsule Backend API Documentation')
+  .setVersion('1.0')
+  .build();
+
+const document = SwaggerModule.createDocument(app, config);
+SwaggerModule.setup('docs', app, document);
 `
-pnpm install
-`
 
-Run development server:
+Then run:
 
 `
 pnpm dev
 `
 
-Build for production:
+Open Swagger UI:
 
 `
-pnpm build
-pnpm start
-`
-
----
-
- Password Hashing (bcryptjs)
-These are code examples, not terminal commands.
-
-Hash password
-`ts
-const hashed = await bcrypt.hash(password, 10);
-`
-
-Compare password
-`ts
-const valid = await bcrypt.compare(password, hashed);
-`
-
-bcryptjs is used because it:  
-- avoids native compilation  
-- works on Termux  
-- avoids node-gyp errors  
-- is stable across Node 2026  
-
----
-
- Health Check
-
-GET /
-Response:
-`
-Backend is running
+http://localhost:3000/docs
 `
 
 ---
-
- Scripts (package.json)
-Your package.json must include:
-
-`
-"scripts": {
-  "dev": "nest start --watch",
-  "start": "nest start",
-  "build": "nest build"
-}
-`
-
----
-
- Troubleshooting
-
- pnpm dev not found
-Add "dev" script to package.json.
-
- bcrypt build error
-Use bcryptjs instead of bcrypt.
-
-Replace:
-`
-import * as bcrypt from 'bcrypt';
-`
-
-With:
-`
-import * as bcrypt from 'bcryptjs';
-`
-
-Then clean install:
-`
-rm -rf node_modules
-rm pnpm-lock.yaml
-pnpm install
-`
-
- Termux repo issues
-`
-termux-change-repo
-`
-
----
-
- CharmCapsule Identity
-CharmCapsule Backend is part of the CharmCapsule Web3 Infrastructure, designed and architected by Charm_Capsule, delivering secure, scalable, and elegant digital systems.
-
----
-
- License
-Owned and maintained by Charm_Capsule.
-
+CharmCapsule Backend is part of the CharmCapsule Web3 Infrastructure,
+architected and maintained by Sovereign Architect Charm_Capsule.
+.
 ---
