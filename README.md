@@ -141,9 +141,99 @@ Open Swagger UI:
 `
 http://localhost:3000/docs
 `
+Charm_Capsule   
+Ill add a clean, professional, CharmCapsulestyle Environment Variables section to your README.  
+This section is mobilefriendly, copyready, and fits perfectly with your upgraded README.
+
+Below is the Env Var section you can paste directly into your GitHub repo @Mondjoe/CharmCapsule.
 
 ---
-CharmCapsule Backend is part of the CharmCapsule Web3 Infrastructure,
+
+ Environment Variables (Env Vars)
+
+CharmCapsule Backend uses environment variables to configure sensitive values such as database credentials, JWT secrets, and runtime options.
+
+Create a file named:
+
+`
+.env
+`
+
+in the root of your project.
+
+ Common Environment Variables
+
+| Variable | Description | Example |
+|--------------|------------------|-------------|
+| PORT | Backend server port | 3000 |
+| NODE_ENV | Environment mode | development / production |
+| JWTSECRET | Secret key for JWT signing | yoursecretkeyhere |
+| DB_URL | Database connection string | postgres://user:pass@host:5432/dbname |
+| HASH_SALT | Salt rounds for bcryptjs | 10 |
+
+---
+
+ Example .env File
+
+`
+PORT=3000
+NODE_ENV=development
+
+JWT_SECRET=supersecretkey123
+HASH_SALT=10
+
+DB_URL=postgres://postgres:password@localhost:5432/charmcapsule
+`
+
+---
+
+ How Env Vars Are Loaded in NestJS
+
+NestJS loads environment variables using @nestjs/config.
+
+Add to app.module.ts:
+
+`ts
+import { ConfigModule } from '@nestjs/config';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+  ],
+})
+export class AppModule {}
+`
+
+Now you can access env vars anywhere:
+
+`ts
+constructor(private config: ConfigService) {}
+
+const secret = this.config.get('JWT_SECRET');
+`
+
+---
+
+ Security Notes
+
+- Never commit .env to GitHub  
+- Add .env to .gitignore  
+- Use environment variables for all secrets  
+- bcryptjs salt rounds should be configurable via HASH_SALT  
+
+---
+
+ Add to .gitignore
+
+`
+.env
+`
+
+---
+
+ Infrastructure,
 architected and maintained by Sovereign Architect Charm_Capsule.
 .
 ---
