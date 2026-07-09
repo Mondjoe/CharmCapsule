@@ -1,29 +1,95 @@
 ---
 
- CharmCapsule Backend  API Table + Swagger Spec (Upgraded)
+ CharmCapsule Backend  Full Merged README
+
+ Overview
+CharmCapsule Backend is a NestJS API system designed for secure authentication, password hashing, modular service expansion, and Termuxfriendly development.  
+It uses bcryptjs to avoid native build failures and is part of the CharmCapsule Web3 Infrastructure built by Charm_Capsule.
+
+---
+
+ Architecture
+`
+src/
+  app.module.ts
+  app.controller.ts
+  app.service.ts
+  modules/
+       user/
+            user.module.ts
+            user.controller.ts
+            user.service.ts
+`
+
+---
+
+ Tech Stack
+- NestJS  
+- TypeScript  
+- pnpm  
+- bcryptjs  
+- Node.js 20+ / 26  
+- Termux compatible  
+
+---
+
+ Installation
+`
+pnpm install
+`
+
+Run development server:
+`
+pnpm dev
+`
+
+Build for production:
+`
+pnpm build
+pnpm start
+`
+
+---
+
+ Password Hashing (bcryptjs)
+These are code examples, not terminal commands.
+
+Hash password:
+`
+bcrypt.hash(password, 10)
+`
+
+Compare password:
+`
+bcrypt.compare(password, hashed)
+`
+
+bcryptjs is used because it avoids native compilation and works perfectly on Termux.
+
+---
+
+ Health Check
+GET /  
+Response:  
+`
+Backend is running
+`
+
+---
 
  API Table
 
 | Endpoint | Method | Description | Body / Params |
 |--------------|------------|------------------|--------------------|
 | / | GET | Health check | None |
-| /user/register | POST | Register new user | { "username": string, "password": string } |
-| /user/login | POST | Login user | { "username": string, "password": string } |
-| /user/hash-test | POST | Test hashing (dev only) | { "password": string } |
-| /user/compare-test | POST | Test compare (dev only) | { "password": string, "hash": string } |
-
-Notes
-- All password operations use bcryptjs  
-- No native modules  
-- Works on Termux / Android  
-- Safe for Node 2026  
+| /user/register | POST | Register new user | { username, password } |
+| /user/login | POST | Login user | { username, password } |
+| /user/hash-test | POST | Hash password (dev only) | { password } |
+| /user/compare-test | POST | Compare password (dev only) | { password, hash } |
 
 ---
 
- Swagger / OpenAPI Spec (AutoReady)
-
-Paste this into your README under Swagger Spec section.  
-This is OpenAPI 3.0 format  ready for Swagger UI, Redoc, or Postman import.
+ Swagger / OpenAPI Spec
 
 `yaml
 openapi: 3.0.0
@@ -111,11 +177,8 @@ paths:
           description: Compare result returned
 `
 
----
-
- How to Enable Swagger in NestJS
-
-Add this inside main.ts:
+Enable Swagger in NestJS
+Add this to main.ts:
 
 `ts
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -130,50 +193,28 @@ const document = SwaggerModule.createDocument(app, config);
 SwaggerModule.setup('docs', app, document);
 `
 
-Then run:
-
-`
-pnpm dev
-`
-
-Open Swagger UI:
-
+Open Swagger UI:  
 `
 http://localhost:3000/docs
 `
-Charm_Capsule   
-Ill add a clean, professional, CharmCapsulestyle Environment Variables section to your README.  
-This section is mobilefriendly, copyready, and fits perfectly with your upgraded README.
-
-Below is the Env Var section you can paste directly into your GitHub repo @Mondjoe/CharmCapsule.
 
 ---
 
  Environment Variables (Env Vars)
 
-CharmCapsule Backend uses environment variables to configure sensitive values such as database credentials, JWT secrets, and runtime options.
+Create a file named .env in your project root.
 
-Create a file named:
-
-`
-.env
-`
-
-in the root of your project.
-
- Common Environment Variables
+Common Variables
 
 | Variable | Description | Example |
-|--------------|------------------|-------------|
-| PORT | Backend server port | 3000 |
+|---------|-------------|---------|
+| PORT | Backend port | 3000 |
 | NODE_ENV | Environment mode | development / production |
-| JWTSECRET | Secret key for JWT signing | yoursecretkeyhere |
+| JWT_SECRET | JWT signing key | yoursecretkeyhere |
 | DB_URL | Database connection string | postgres://user:pass@host:5432/dbname |
-| HASH_SALT | Salt rounds for bcryptjs | 10 |
+| HASH_SALT | bcryptjs salt rounds | 10 |
 
----
-
- Example .env File
+Example .env
 
 `
 PORT=3000
@@ -185,13 +226,7 @@ HASH_SALT=10
 DB_URL=postgres://postgres:password@localhost:5432/charmcapsule
 `
 
----
-
- How Env Vars Are Loaded in NestJS
-
-NestJS loads environment variables using @nestjs/config.
-
-Add to app.module.ts:
+Load Env Vars in NestJS
 
 `ts
 import { ConfigModule } from '@nestjs/config';
@@ -206,7 +241,7 @@ import { ConfigModule } from '@nestjs/config';
 export class AppModule {}
 `
 
-Now you can access env vars anywhere:
+Access anywhere:
 
 `ts
 constructor(private config: ConfigService) {}
@@ -214,26 +249,40 @@ constructor(private config: ConfigService) {}
 const secret = this.config.get('JWT_SECRET');
 `
 
----
-
- Security Notes
-
-- Never commit .env to GitHub  
+Security
+- Never commit .env  
 - Add .env to .gitignore  
-- Use environment variables for all secrets  
-- bcryptjs salt rounds should be configurable via HASH_SALT  
+- Use env vars for all secrets  
 
 ---
 
- Add to .gitignore
+ Troubleshooting
+
+pnpm dev not found
+Add "dev" script to package.json.
+
+bcrypt build error
+Use bcryptjs instead of bcrypt.  
+Then:
 
 `
-.env
+rm -rf node_modules
+rm pnpm-lock.yaml
+pnpm install
+`
+
+Termux repo issues
+`
+termux-change-repo
 `
 
 ---
 
- Infrastructure,
-architected and maintained by Sovereign Architect Charm_Capsule.
-.
+ CharmCapsule Identity
+CharmCapsule Backend is part of the CharmCapsule Web3 Ecosystem, architected and maintained by Charm_Capsule, delivering secure, scalable, and elegant digital systems.
+
+---
+
+ License
+Owned and maintained by CharmCapsule(Mondjoe)
 ---
