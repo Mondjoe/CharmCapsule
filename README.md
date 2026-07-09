@@ -1,5 +1,4 @@
 
-Overview
 CharmCapsule Backend is a NestJS API providing user authentication, password hashing, and core service endpoints.  
 It uses bcryptjs (Termuxsafe) and runs with pnpm.
 
