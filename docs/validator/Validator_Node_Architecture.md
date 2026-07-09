@@ -1,0 +1,1 @@
+/docs/validator/Validator_Node_Architecture.md
