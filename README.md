@@ -1,16 +1,63 @@
-# CharmCapsule Backend
 
-CharmCapsule is the backend service powering the Charm Validator Dashboard ecosystem.  
-This repository contains the NestJS API, Prisma ORM, and database schema used for validator operations.
+Overview
+CharmCapsule Backend is a NestJS API providing user authentication, password hashing, and core service endpoints.  
+It uses bcryptjs (Termuxsafe) and runs with pnpm.
 
-## 📂 Project Structure
-- `src/` — Main NestJS application code  
-- `prisma/` — Prisma schema and migrations  
-- `database/` — Local development database files (if used)  
-- `nest-cli.json` — NestJS CLI configuration  
-- `tsconfig.json` — TypeScript configuration  
-- `package.json` — Project dependencies and scripts  
+Project Structure
+src/  
+- app.module.ts  
+- app.controller.ts  
+- app.service.ts  
+- modules/user/user.module.ts  
+- modules/user/user.controller.ts  
+- modules/user/user.service.ts  
 
-## 🚀 Running Locally
+Tech Stack
+NestJS  
+TypeScript  
+pnpm  
+bcryptjs  
+Node.js 20+ / 26  
 
-Install dependencies:
+Installation
+pnpm install
+
+Run Development
+pnpm dev
+
+Production
+pnpm build  
+pnpm start
+
+Password Hashing (bcryptjs)
+Code example (not terminal commands):  
+- bcrypt.hash(password, 10)  
+- bcrypt.compare(password, hashed)
+
+Health Check
+GET /  
+Response: Backend is running
+
+Scripts (package.json)
+scripts:  
+- dev: nest start --watch  
+- start: nest start  
+- build: nest build  
+
+Troubleshooting
+If pnpm dev not found:  
+Add dev script to package.json.
+
+If bcrypt build error:  
+Use bcryptjs instead of bcrypt.  
+Replace import bcrypt  import bcryptjs.  
+Then:  
+rm -rf node_modules  
+rm pnpm-lock.yaml  
+pnpm install
+
+If Termux repo errors:  
+termux-change-repo
+
+License
+Owned and maintained by Charm_Capsule.
