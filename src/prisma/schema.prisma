@@ -20,16 +20,12 @@ model Chain {
 }
 
 model Validator {
-  id          String   @id @default(uuid())
-  chainId     String
-  address     String
-  name        String?
-  status      String?
-  commission  Int?
-  apr         Float?
-  totalStaked Float?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  chainId   String
+  address   String
+  name      String?
+  createdAt DateTime @default(now())
+}
 
   chain   Chain             @relation(fields: [chainId], references: [id])
   metrics ValidatorMetric[]
