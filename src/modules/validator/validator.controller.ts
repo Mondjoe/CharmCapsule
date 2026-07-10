@@ -1,3 +1,17 @@
+import {
+  Controller,
+  Post,
+  Get,
+  Patch,
+  Delete,
+  Param,
+  Body
+} from '@nestjs/common';
+
+import { ValidatorService } from './validator.service';
+import { CreateValidatorDto } from './dto/create-validator.dto';
+import { UpdateValidatorDto } from './dto/update-validator.dto';
+
 @Controller('validators')
 export class ValidatorController {
   constructor(private validatorService: ValidatorService) {}
